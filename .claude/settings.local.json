@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fvm list *)",
+      "Bash(fvm flutter *)",
+      "Bash(curl -s https://pub.dev/api/packages/sqlite3_flutter_libs)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}
