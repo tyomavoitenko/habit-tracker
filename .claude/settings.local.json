@@ -4,7 +4,13 @@
       "Bash(fvm list *)",
       "Bash(fvm flutter *)",
       "Bash(curl -s https://pub.dev/api/packages/sqlite3_flutter_libs)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(xargs -I{} echo {})",
+      "Read(//Users/artemvoitenko/.pub-cache/hosted/pub.dev/drift_flutter-0.2.7/lib/**)",
+      "Bash(fvm dart *)",
+      "Bash(git status *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

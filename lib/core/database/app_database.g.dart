@@ -3,7 +3,7 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
+class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -54,7 +54,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   static const String $name = 'habits';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Habit> instance, {
+    Insertable<HabitRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -84,9 +84,9 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Habit map(Map<String, dynamic> data, {String? tablePrefix}) {
+  HabitRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Habit(
+    return HabitRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -108,11 +108,15 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
   }
 }
 
-class Habit extends DataClass implements Insertable<Habit> {
+class HabitRow extends DataClass implements Insertable<HabitRow> {
   final int id;
   final String name;
   final DateTime createdAt;
-  const Habit({required this.id, required this.name, required this.createdAt});
+  const HabitRow({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -130,12 +134,12 @@ class Habit extends DataClass implements Insertable<Habit> {
     );
   }
 
-  factory Habit.fromJson(
+  factory HabitRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Habit(
+    return HabitRow(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -151,13 +155,13 @@ class Habit extends DataClass implements Insertable<Habit> {
     };
   }
 
-  Habit copyWith({int? id, String? name, DateTime? createdAt}) => Habit(
+  HabitRow copyWith({int? id, String? name, DateTime? createdAt}) => HabitRow(
     id: id ?? this.id,
     name: name ?? this.name,
     createdAt: createdAt ?? this.createdAt,
   );
-  Habit copyWithCompanion(HabitsCompanion data) {
-    return Habit(
+  HabitRow copyWithCompanion(HabitsCompanion data) {
+    return HabitRow(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
@@ -166,7 +170,7 @@ class Habit extends DataClass implements Insertable<Habit> {
 
   @override
   String toString() {
-    return (StringBuffer('Habit(')
+    return (StringBuffer('HabitRow(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt')
@@ -179,13 +183,13 @@ class Habit extends DataClass implements Insertable<Habit> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Habit &&
+      (other is HabitRow &&
           other.id == this.id &&
           other.name == this.name &&
           other.createdAt == this.createdAt);
 }
 
-class HabitsCompanion extends UpdateCompanion<Habit> {
+class HabitsCompanion extends UpdateCompanion<HabitRow> {
   final Value<int> id;
   final Value<String> name;
   final Value<DateTime> createdAt;
@@ -200,7 +204,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
     required DateTime createdAt,
   }) : name = Value(name),
        createdAt = Value(createdAt);
-  static Insertable<Habit> custom({
+  static Insertable<HabitRow> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
@@ -250,7 +254,8 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
   }
 }
 
-class $CheckInsTable extends CheckIns with TableInfo<$CheckInsTable, CheckIn> {
+class $CheckInsTable extends CheckIns
+    with TableInfo<$CheckInsTable, CheckInRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -279,7 +284,7 @@ class $CheckInsTable extends CheckIns with TableInfo<$CheckInsTable, CheckIn> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES habits (id)',
+      'REFERENCES habits (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
@@ -300,7 +305,7 @@ class $CheckInsTable extends CheckIns with TableInfo<$CheckInsTable, CheckIn> {
   static const String $name = 'check_ins';
   @override
   VerificationContext validateIntegrity(
-    Insertable<CheckIn> instance, {
+    Insertable<CheckInRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -334,9 +339,9 @@ class $CheckInsTable extends CheckIns with TableInfo<$CheckInsTable, CheckIn> {
     {habitId, date},
   ];
   @override
-  CheckIn map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CheckInRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CheckIn(
+    return CheckInRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -358,11 +363,15 @@ class $CheckInsTable extends CheckIns with TableInfo<$CheckInsTable, CheckIn> {
   }
 }
 
-class CheckIn extends DataClass implements Insertable<CheckIn> {
+class CheckInRow extends DataClass implements Insertable<CheckInRow> {
   final int id;
   final int habitId;
   final DateTime date;
-  const CheckIn({required this.id, required this.habitId, required this.date});
+  const CheckInRow({
+    required this.id,
+    required this.habitId,
+    required this.date,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -380,12 +389,12 @@ class CheckIn extends DataClass implements Insertable<CheckIn> {
     );
   }
 
-  factory CheckIn.fromJson(
+  factory CheckInRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CheckIn(
+    return CheckInRow(
       id: serializer.fromJson<int>(json['id']),
       habitId: serializer.fromJson<int>(json['habitId']),
       date: serializer.fromJson<DateTime>(json['date']),
@@ -401,13 +410,13 @@ class CheckIn extends DataClass implements Insertable<CheckIn> {
     };
   }
 
-  CheckIn copyWith({int? id, int? habitId, DateTime? date}) => CheckIn(
+  CheckInRow copyWith({int? id, int? habitId, DateTime? date}) => CheckInRow(
     id: id ?? this.id,
     habitId: habitId ?? this.habitId,
     date: date ?? this.date,
   );
-  CheckIn copyWithCompanion(CheckInsCompanion data) {
-    return CheckIn(
+  CheckInRow copyWithCompanion(CheckInsCompanion data) {
+    return CheckInRow(
       id: data.id.present ? data.id.value : this.id,
       habitId: data.habitId.present ? data.habitId.value : this.habitId,
       date: data.date.present ? data.date.value : this.date,
@@ -416,7 +425,7 @@ class CheckIn extends DataClass implements Insertable<CheckIn> {
 
   @override
   String toString() {
-    return (StringBuffer('CheckIn(')
+    return (StringBuffer('CheckInRow(')
           ..write('id: $id, ')
           ..write('habitId: $habitId, ')
           ..write('date: $date')
@@ -429,13 +438,13 @@ class CheckIn extends DataClass implements Insertable<CheckIn> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CheckIn &&
+      (other is CheckInRow &&
           other.id == this.id &&
           other.habitId == this.habitId &&
           other.date == this.date);
 }
 
-class CheckInsCompanion extends UpdateCompanion<CheckIn> {
+class CheckInsCompanion extends UpdateCompanion<CheckInRow> {
   final Value<int> id;
   final Value<int> habitId;
   final Value<DateTime> date;
@@ -450,7 +459,7 @@ class CheckInsCompanion extends UpdateCompanion<CheckIn> {
     required DateTime date,
   }) : habitId = Value(habitId),
        date = Value(date);
-  static Insertable<CheckIn> custom({
+  static Insertable<CheckInRow> custom({
     Expression<int>? id,
     Expression<int>? habitId,
     Expression<DateTime>? date,
@@ -510,6 +519,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [habits, checkIns];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'habits',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('check_ins', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$HabitsTableCreateCompanionBuilder =
@@ -526,12 +545,11 @@ typedef $$HabitsTableUpdateCompanionBuilder =
     });
 
 final class $$HabitsTableReferences
-    extends BaseReferences<_$AppDatabase, $HabitsTable, Habit> {
+    extends BaseReferences<_$AppDatabase, $HabitsTable, HabitRow> {
   $$HabitsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$CheckInsTable, List<CheckIn>> _checkInsRefsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
+  static MultiTypedResultKey<$CheckInsTable, List<CheckInRow>>
+  _checkInsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.checkIns,
     aliasName: $_aliasNameGenerator(db.habits.id, db.checkIns.habitId),
   );
@@ -673,14 +691,14 @@ class $$HabitsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $HabitsTable,
-          Habit,
+          HabitRow,
           $$HabitsTableFilterComposer,
           $$HabitsTableOrderingComposer,
           $$HabitsTableAnnotationComposer,
           $$HabitsTableCreateCompanionBuilder,
           $$HabitsTableUpdateCompanionBuilder,
-          (Habit, $$HabitsTableReferences),
-          Habit,
+          (HabitRow, $$HabitsTableReferences),
+          HabitRow,
           PrefetchHooks Function({bool checkInsRefs})
         > {
   $$HabitsTableTableManager(_$AppDatabase db, $HabitsTable table)
@@ -724,7 +742,11 @@ class $$HabitsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (checkInsRefs)
-                    await $_getPrefetchedData<Habit, $HabitsTable, CheckIn>(
+                    await $_getPrefetchedData<
+                      HabitRow,
+                      $HabitsTable,
+                      CheckInRow
+                    >(
                       currentTable: table,
                       referencedTable: $$HabitsTableReferences
                           ._checkInsRefsTable(db),
@@ -746,14 +768,14 @@ typedef $$HabitsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $HabitsTable,
-      Habit,
+      HabitRow,
       $$HabitsTableFilterComposer,
       $$HabitsTableOrderingComposer,
       $$HabitsTableAnnotationComposer,
       $$HabitsTableCreateCompanionBuilder,
       $$HabitsTableUpdateCompanionBuilder,
-      (Habit, $$HabitsTableReferences),
-      Habit,
+      (HabitRow, $$HabitsTableReferences),
+      HabitRow,
       PrefetchHooks Function({bool checkInsRefs})
     >;
 typedef $$CheckInsTableCreateCompanionBuilder =
@@ -770,7 +792,7 @@ typedef $$CheckInsTableUpdateCompanionBuilder =
     });
 
 final class $$CheckInsTableReferences
-    extends BaseReferences<_$AppDatabase, $CheckInsTable, CheckIn> {
+    extends BaseReferences<_$AppDatabase, $CheckInsTable, CheckInRow> {
   $$CheckInsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $HabitsTable _habitIdTable(_$AppDatabase db) => db.habits.createAlias(
@@ -922,14 +944,14 @@ class $$CheckInsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $CheckInsTable,
-          CheckIn,
+          CheckInRow,
           $$CheckInsTableFilterComposer,
           $$CheckInsTableOrderingComposer,
           $$CheckInsTableAnnotationComposer,
           $$CheckInsTableCreateCompanionBuilder,
           $$CheckInsTableUpdateCompanionBuilder,
-          (CheckIn, $$CheckInsTableReferences),
-          CheckIn,
+          (CheckInRow, $$CheckInsTableReferences),
+          CheckInRow,
           PrefetchHooks Function({bool habitId})
         > {
   $$CheckInsTableTableManager(_$AppDatabase db, $CheckInsTable table)
@@ -1016,14 +1038,14 @@ typedef $$CheckInsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $CheckInsTable,
-      CheckIn,
+      CheckInRow,
       $$CheckInsTableFilterComposer,
       $$CheckInsTableOrderingComposer,
       $$CheckInsTableAnnotationComposer,
       $$CheckInsTableCreateCompanionBuilder,
       $$CheckInsTableUpdateCompanionBuilder,
-      (CheckIn, $$CheckInsTableReferences),
-      CheckIn,
+      (CheckInRow, $$CheckInsTableReferences),
+      CheckInRow,
       PrefetchHooks Function({bool habitId})
     >;
 
