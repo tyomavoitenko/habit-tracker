@@ -11,6 +11,8 @@ abstract class HabitRepository {
 
   Future<Habit> createHabit(String name);
 
+  Future<void> updateHabit(int habitId, String name);
+
   Future<void> deleteHabit(int habitId);
 
   Stream<List<CheckIn>> watchCheckIns(int habitId);

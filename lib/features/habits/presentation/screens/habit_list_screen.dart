@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/features/habits/presentation/providers/habits_provider.dart';
 import 'package:habit_tracker/features/habits/presentation/widgets/habit_list_tile.dart';
 
@@ -26,6 +27,10 @@ class HabitListScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) =>
             Center(child: Text('Something went wrong: $error')),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/habits/new'),
+        child: const Icon(Icons.add),
       ),
     );
   }

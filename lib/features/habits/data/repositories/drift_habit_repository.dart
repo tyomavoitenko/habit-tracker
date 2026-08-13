@@ -26,6 +26,13 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
+  Future<void> updateHabit(int habitId, String name) {
+    return (_db.update(_db.habits)..where((h) => h.id.equals(habitId))).write(
+      HabitsCompanion(name: Value(name)),
+    );
+  }
+
+  @override
   Future<void> deleteHabit(int habitId) {
     return (_db.delete(_db.habits)..where((h) => h.id.equals(habitId))).go();
   }

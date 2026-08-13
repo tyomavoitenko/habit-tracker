@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/features/habits/domain/entities/habit.dart';
 import 'package:habit_tracker/features/habits/presentation/providers/habits_provider.dart';
 
@@ -14,6 +15,7 @@ class HabitListTile extends ConsumerWidget {
 
     return ListTile(
       title: Text(habit.name),
+      onTap: () => context.push('/habits/${habit.id}/edit', extra: habit),
       trailing: checkedInAsync.when(
         data: (checkedIn) => Icon(
           checkedIn ? Icons.check_circle : Icons.circle_outlined,
