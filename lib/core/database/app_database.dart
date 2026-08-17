@@ -12,4 +12,14 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  // SQLite has foreign key enforcement off by default per-connection, so
+  // CheckIns.habitId's onDelete: cascade silently does nothing unless this
+  // is turned on for every connection we open.
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
 }
