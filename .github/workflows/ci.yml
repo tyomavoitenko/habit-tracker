@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze-and-test:
+    # macos-latest, not the usual ubuntu-latest: this repo has a golden
+    # (pixel-comparison) test, and Flutter's golden files are only reliable
+    # when generated and verified on the same OS family. The golden files
+    # here were generated on macOS, so CI runs there too.
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.38.7 # keep in sync with .fvmrc
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
