@@ -11,9 +11,9 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Stream<List<Habit>> watchHabits() {
-    return _db.select(_db.habits).watch().map(
-      (rows) => rows.map(_habitFromRow).toList(),
-    );
+    final query = _db.select(_db.habits)
+      ..orderBy([(h) => OrderingTerm.asc(h.createdAt)]);
+    return query.watch().map((rows) => rows.map(_habitFromRow).toList());
   }
 
   @override
