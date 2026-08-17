@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:habit_tracker/features/habits/domain/entities/habit.dart';
+import 'package:habit_tracker/features/habits/presentation/screens/habit_detail_screen.dart';
 import 'package:habit_tracker/features/habits/presentation/screens/habit_form_screen.dart';
 import 'package:habit_tracker/features/habits/presentation/screens/habit_list_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,6 +16,11 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/habits/new',
         builder: (context, state) => const HabitFormScreen(),
+      ),
+      GoRoute(
+        path: '/habits/:id',
+        builder: (context, state) =>
+            HabitDetailScreen(habit: state.extra! as Habit),
       ),
       GoRoute(
         path: '/habits/:id/edit',
